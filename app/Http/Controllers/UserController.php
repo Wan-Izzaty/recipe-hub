@@ -12,7 +12,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        recipe = Users::all();
+        return view ('recipe.index', compact('recipes'));
     }
 
     /**
@@ -20,7 +21,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view ('recipe.create');
     }
 
     /**
@@ -28,7 +29,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request -> validate([
+            'title' => 'required',
+            'ingredients' => 'required',
+            'direction' => 'required',
+        ]);
+        $recipe = Users::create($data); //save to DB
+        return redirect ()->route('user.show', $recipe->id);
     }
 
     /**
@@ -36,7 +43,7 @@ class UserController extends Controller
      */
     public function show(Users $users)
     {
-        //
+        return view ('recipe.show', ['recipe' => $users]);
     }
 
     /**
@@ -44,7 +51,7 @@ class UserController extends Controller
      */
     public function edit(Users $users)
     {
-        //
+        return view ('recipe.edit', ['recipe' => $users]);
     }
 
     /**
@@ -52,7 +59,14 @@ class UserController extends Controller
      */
     public function update(Request $request, Users $users)
     {
-        //
+        $data = $request -> validate([
+                'title' => 'required',
+                'ingredients' => 'required',
+                'directions' => 'required',
+        ]);
+
+        $users ->update($data);
+        return redirect () -> route ('user.show', $users ->id);
     }
 
     /**
@@ -60,6 +74,7 @@ class UserController extends Controller
      */
     public function destroy(Users $users)
     {
-        //
+        $users ->delete();
+        return redirect ()->route(user.index);
     }
 }
